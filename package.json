@@ -1,0 +1,25 @@
+{
+ "name": "TURP-Lambda",
+ "version": "0.1.0",
+ "repository": "microneer/TURP-Lambda",
+ "description": "The Urban Rat Project Lambda API for deployment into AWS Lambda",
+ "main": "index.js",
+ "scripts": {
+  "test": "echo \"Error: no test specified\" && exit 1",
+  "deploy": " � zip-file fileb://Lambda-Deployment.zip",
+  "predeploy": "\"c:\\Program Files (x86)\\7-Zip\\7z.exe\" a -r -bt -tzip Lambda-Deploy.zip *.* -x!*.log -x!*.zip"
+ },
+ "keywords": [
+  "postgres",
+  "The Urban Rat Project",
+  "conservation",
+  "New Zealand",
+  "Predator Free 2050"
+ ],
+ "author": "Michael Fielding",
+ "license": "Apache-2.0",
+ "dependencies": {
+  "csv-generate": "^2.1.0",
+  "pg": "^6.4"
+ }
+}
