@@ -55,9 +55,13 @@ async function c_sql( callback, event, sSql ) {
   function encodeRowsAsContentType( sContentType, aRows ) {
     switch (sContentType.toLowerCase()) {
       case "application/json": 
+        console.log("Creating JSON...");
         return JSON.stringify(aRows);
       case "text/csv":
-        return "hey, it's nearly working, well, nearly nearly";
+        const json2csv = require('json2csv').parse;
+        const opts = {};
+        console.log("Creating CSV...");
+        return json2csv(aRows, opts);
       default: 
         throw new Error("Unhandled content type "+sContentType);
     }
@@ -114,17 +118,21 @@ exports.handler = async (event, context, callback) => {
       command: c_sql1,
       params: ["SELECT * from public.latest_story_revisions WHERE story_id = {storyId} LIMIT 1;"]
     },
-    "/reports/{projectId}/{year}/{month}": {
+    "/project/{projectId}/reports/by-month": {
+      command: c_sql,
+      params: ["SELECT date_part('YEAR', date)::int AS year, date_part('month', date)::int AS month, COUNT(*) count FROM public.reports r LEFT JOIN latest_project_revisions p ON r.project = p.title WHERE p.project_id = {projectId} GROUP BY year, month ORDER BY	year DESC, month DESC"]
+    },
+    "/project/{projectId}/reports/{year}": {
+      command: c_sql,
+      params: ["SELECT r.id report_id, r.date, r.email_address, r.project, p.project_id project_id,r.street_number, r.street, r.postcode, r.minutes, r.trap_checked, r.trap_reset, r.trap_lure_added, r.trap_caught, r.bait_checked, r.bait_added, r.bait_taken, r.submission_id, r.created_at, r.ip_address FROM reports r LEFT JOIN latest_project_revisions p ON r.project = p.title WHERE project_id = {projectId}	AND date_part('YEAR', date) = {year} ORDER BY date ASC, email_address ASC, r.id ASC;"]
+    },    
+    "/project/{projectId}/reports/{year}/{month}": {
       command: c_sql,
       params: ["SELECT r.id report_id, r.date, r.email_address, r.project, p.project_id project_id,r.street_number, r.street, r.postcode, r.minutes, r.trap_checked, r.trap_reset, r.trap_lure_added, r.trap_caught, r.bait_checked, r.bait_added, r.bait_taken, r.submission_id, r.created_at, r.ip_address FROM reports r LEFT JOIN latest_project_revisions p ON r.project = p.title WHERE project_id = {projectId}	AND date_part('YEAR', date) = {year} AND date_part('month', date) = {month} ORDER BY date ASC, email_address ASC, r.id ASC;"]
     },
-    "/reports/{emailAddress}": {
+    "/user/{emailAddress}/reports": {
       command: c_sql,
-      params: ["SELECT * from public.reports WHERE email_address = {emailAddress};"]
-    },
-    "/reports-by-month/{projectId}": {
-      command: c_sql,
-      params: ["SELECT date_part('YEAR', date)::int AS year, date_part('month', date)::int AS month, COUNT(*) count FROM public.reports r LEFT JOIN latest_project_revisions p ON r.project = p.title WHERE p.project_id = {projectId} GROUP BY year, month ORDER BY	year DESC, month DESC"]
+      params: ["SELECT * FROM public.reports WHERE email_address = '{emailAddress}' ORDER BY date ASC;"]
     }
   };
   

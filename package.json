@@ -7,7 +7,8 @@
  "scripts": {
   "test": "echo \"Error: no test specified\" && exit 1",
   "deploy": " � zip-file fileb://Lambda-Deployment.zip",
-  "predeploy": "\"c:\\Program Files (x86)\\7-Zip\\7z.exe\" a -r -bt -tzip Lambda-Deploy.zip *.* -x!*.log -x!*.zip"
+  "predeploywin64": "\"c:\\Program Files\\7-Zip\\7z.exe\" a -r -bt -tzip Lambda-Deploy.zip *.* -x!*.log -x!*.zip",
+  "predeploywin32": "\"c:\\Program Files (x86)\\7-Zip\\7z.exe\" a -r -bt -tzip Lambda-Deploy.zip *.* -x!*.log -x!*.zip"
  },
  "keywords": [
   "postgres",
@@ -19,7 +20,7 @@
  "author": "Michael Fielding",
  "license": "Apache-2.0",
  "dependencies": {
-  "csv-generate": "^2.1.0",
+  "json2csv": "^4.2.1",
   "pg": "^6.4"
  }
 }
