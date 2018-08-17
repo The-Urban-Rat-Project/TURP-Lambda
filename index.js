@@ -54,6 +54,7 @@ async function c_sql( callback, event, sSql ) {
   // Return some rows, encoded in the given content type, or throw an Error
   function encodeRowsAsContentType( sContentType, aRows ) {
     switch (sContentType.toLowerCase()) {
+      case "*/*":
       case "application/json": 
         console.log("Creating JSON...");
         return JSON.stringify(aRows);
