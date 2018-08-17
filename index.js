@@ -134,6 +134,14 @@ exports.handler = async (event, context, callback) => {
     "/user/{emailAddress}/reports": {
       command: c_sql,
       params: ["SELECT * FROM public.reports WHERE email_address = '{emailAddress}' ORDER BY date ASC;"]
+    },
+    "/reports-for-export": {
+      command: c_sql,
+      params: ["SELECT * FROM public.reports_for_export;"]
+    },
+    "/postcodes": {
+      command: c_sql,
+      params: ["SELECT * FROM public.postcodes;"]
     }
   };
   
