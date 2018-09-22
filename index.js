@@ -7,6 +7,7 @@ function sendAPIGatewayResponse( callback, iHttpStatusCode, sBody, oHeaders ) {
   if ( typeof oHeaders == "undefined" ) {
     oHeaders = {};
   }
+  oHeaders['Access-Control-Allow-Origin'] = '*';
   callback( null, {
     "statusCode": iHttpStatusCode,
     "headers": oHeaders,
@@ -39,6 +40,7 @@ async function getDatabaseRows( sSql ) {
   console.log("Connected.");
   
   // Fix for parsing of big integer fields, instead of text, return as an integer
+  // See https://github.com/brianc/node-pg-types/blob/master/README.md
   var types = require('pg').types
   types.setTypeParser(20, parseInt);
   
