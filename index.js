@@ -38,6 +38,10 @@ async function getDatabaseRows( sSql ) {
   const client = await pool.connect();
   console.log("Connected.");
   
+  // Fix for parsing of big integer fields, instead of text, return as an integer
+  var types = require('pg').types
+  types.setTypeParser(20, parseInt);
+  
   // execute the query
 	console.log("Starting query ["+sSql+"]...");
   var res = await client.query(sSql);
@@ -142,6 +146,10 @@ exports.handler = async (event, context, callback) => {
     "/reports-for-export": {
       command: c_sql,
       params: ["SELECT * FROM public.reports_for_export;"]
+    },
+    "/summary": {
+      command: c_sql1,
+      params: ["SELECT * FROM public.summary;"]
     },
     "/postcodes": {
       command: c_sql,
