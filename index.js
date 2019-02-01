@@ -40,7 +40,6 @@ async function getDatabaseRows( sSql ) {
   console.log("Connected.");
   
   // Fix for parsing of big integer fields, instead of text, return as an integer
-  // See https://github.com/brianc/node-pg-types/blob/master/README.md
   var types = require('pg').types
   types.setTypeParser(20, parseInt);
   
@@ -131,11 +130,11 @@ exports.handler = async (event, context, callback) => {
     },
     "/project/{projectId}/reports/{year}": {
       command: c_sql,
-      params: ["SELECT r.id report_id, r.date, r.email_address, r.project, p.project_id project_id,r.street_number, r.street, r.postcode, r.minutes, r.trap_checked, r.trap_reset, r.trap_lure_added, r.trap_caught, r.bait_checked, r.bait_added, r.bait_taken, r.submission_id, r.created_at, r.ip_address FROM reports r LEFT JOIN latest_project_revisions p ON r.project = p.title WHERE project_id = {projectId}	AND date_part('YEAR', date) = {year} ORDER BY date ASC, email_address ASC, r.id ASC;"]
-    },    
+      params: ["SELECT id report_id, date, email_address, project, project_id, projects, street_number, street, postcode, minutes, trap_checked, trap_reset, trap_lure_added, trap_caught, bait_checked, bait_added, bait_taken, submission_id, created_at, ip_address FROM reports_with_project_id WHERE project_id = {projectId} AND date_part('YEAR', date) = {year} ORDER BY date ASC, email_address ASC, id ASC;"]
+    },
     "/project/{projectId}/reports/{year}/{month}": {
       command: c_sql,
-      params: ["SELECT r.id report_id, r.date, r.email_address, r.project, p.project_id project_id,r.street_number, r.street, r.postcode, r.minutes, r.trap_checked, r.trap_reset, r.trap_lure_added, r.trap_caught, r.bait_checked, r.bait_added, r.bait_taken, r.submission_id, r.created_at, r.ip_address FROM reports r LEFT JOIN latest_project_revisions p ON r.project = p.title WHERE project_id = {projectId}	AND date_part('YEAR', date) = {year} AND date_part('month', date) = {month} ORDER BY date ASC, email_address ASC, r.id ASC;"]
+      params: ["SELECT id report_id, date, email_address, project, project_id, projects, street_number, street, postcode, minutes, trap_checked, trap_reset, trap_lure_added, trap_caught, bait_checked, bait_added, bait_taken, submission_id, created_at, ip_address FROM reports_with_project_id WHERE project_id = {projectId} AND date_part('YEAR', date) = {year} AND date_part('month', date) = {month} ORDER BY date ASC, email_address ASC, id ASC;"]
     },
     "/user/{emailAddress}/reports": {
       command: c_sql,
