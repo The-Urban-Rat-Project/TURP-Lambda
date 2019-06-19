@@ -124,9 +124,13 @@ exports.handler = async (event, context, callback) => {
       command: c_sql1,
       params: ["SELECT * from public.latest_story_revisions WHERE story_id = {storyId} LIMIT 1;"]
     },
-    "/project/{projectId}/reports/by-month": {
+    "/project/{projectId}/stats/by-month": {
       command: c_sql,
-      params: ["SELECT date_part('YEAR', date)::int AS year, date_part('month', date)::int AS month, COUNT(*) count FROM public.reports r LEFT JOIN latest_project_revisions p ON r.project = p.title WHERE p.project_id = {projectId} GROUP BY year, month ORDER BY	year DESC, month DESC"]
+      params: ["SELECT * FROM stats_by_project_month WHERE project_id = {projectId}"]
+    },
+    "/project/{projectId}/stats/by-year": {
+      command: c_sql,
+      params: ["SELECT * FROM stats_by_project_year WHERE project_id = {projectId}"]
     },
     "/project/{projectId}/reports/{year}": {
       command: c_sql,
@@ -155,7 +159,28 @@ exports.handler = async (event, context, callback) => {
     "/postcodes": {
       command: c_sql,
       params: ["SELECT * FROM public.postcodes;"]
+    },
+    "/stats": {
+      command: c_sql,
+      params: ["SELECT * FROM stats_latest"]
+    },
+    "/stats/postcodes": {
+      command: c_sql,
+      params: ["SELECT * FROM stats_by_postcode_latest"]
+    },
+    "/stats/streets": {
+      command: c_sql,
+      params: ["SELECT * FROM stats_by_street_latest"]
+    },
+    "/stats/projects/by-month": {
+      command: c_sql,
+      params: ["SELECT * FROM stats_by_project_month"]
+    },
+    "/stats/projects/by-year": {
+      command: c_sql,
+      params: ["SELECT * FROM stats_by_project_year"]
     }
+
   };
   
   
