@@ -110,11 +110,11 @@ exports.handler = async (event, context, callback) => {
     },    
     "/projects": {
       command: c_sql,
-      params: ["SELECT * from public.latest_project_revisions;"]
+      params: ["SELECT * from public.projects_with_top_postcode;"]
     },
     "/project/{projectId}": {
       command: c_sql1,
-      params: ["SELECT * from public.latest_project_revisions WHERE project_id = {projectId} LIMIT 1;"]
+      params: ["SELECT * from public.projects_with_top_postcode WHERE project_id = {projectId} LIMIT 1;"]
     },
     "/stories": {
       command: c_sql,
