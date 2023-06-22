@@ -21,6 +21,6 @@
  "license": "Apache-2.0",
  "dependencies": {
   "json2csv": "^4.2.1",
-  "pg": "^6.4"
+  "pg": "^8.11"
  }
 }
